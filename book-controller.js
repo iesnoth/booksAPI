@@ -55,7 +55,7 @@ books.post(`/`,(req,res)=>{
 
 //find an individual book by id
 books.get('/:id',(req,res)=>{
-    Book.findById(req.param.id)
+    Book.findById(req.params.id)
     .then(foundBook =>{
         if (foundBook == null) {
             res.status(400).json({
@@ -70,9 +70,11 @@ books.get('/:id',(req,res)=>{
 
 //not sure how this updates the book
 books.put(`/:id`,(req,res)=>{
-    Book.findByIdAndUpdate(req.param.id, req.body)
+    Book.findByIdAndUpdate(req.params.id, req.body)
     .then(()=>{
-        res.status(201).redirect(`books/${req.params.id}`)
+        res.status(201).json({
+            message:"Update successful."
+        })
     })
     .catch(err =>{
         res.status(400).json({
