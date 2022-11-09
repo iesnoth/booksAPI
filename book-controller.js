@@ -3,12 +3,31 @@
 const express = require('express')
 const books = express.Router()
 const Book = require(`./model`)
+const bookSeed = require(`./book-seed`)
+
+//seed
+books.get(`/seed`,(req,res)=>{
+    console.log("seeded!")
+    Book.insertMany(bookSeed)
+    .then(createdBooks => {
+        res.json({
+            message:"Seed successful."
+        })
+    })
+    .catch(err =>{
+        res.status(404).json({
+            "errorCode": "SEED_UNSUCCESSFUL",
+            "errorMessage": "Seed protocol did not fulfill."
+        })
+
+        })
+})
 
 //find all the books
 books.get(`/`,(req,res) => {
     Book.find()
     .then(foundBooks =>{
-        res.status(200).json({"goodjob":"you did it"})
+        res.status(200).json(foundBooks)
     })
     .catch(err =>{
         res.status(404).json({
